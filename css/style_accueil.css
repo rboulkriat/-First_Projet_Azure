@@ -1,0 +1,681 @@
+body {
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #000000, #8A2BE2); 
+    background-size: cover;
+    color: white;
+    margin: 0; 
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto; 
+}
+/* Styliser le header */
+header {
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding: 1em;
+    z-index: 2; 
+    position: relative;  
+}
+
+nav {
+    padding-left: 490px;
+}
+
+.sub-menu {
+    display: none;
+}
+
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center; 
+    
+}
+
+nav ul li {
+    margin-right: 20px;
+    position: relative; 
+}
+
+/* Styliser les liens de navigation pour qu'ils apparaissent comme des boutons */
+nav ul li a.btn {
+    text-decoration: none;
+    color: var(--color);
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-content: center;
+    padding: .5em 1.5em;
+    font-size: 17px;
+    border: 0;
+    text-transform: uppercase;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, .6);
+    clip-path: polygon(
+        0% var(--curve-size),
+
+        var(--curve-size) 0,
+        100% 0,
+        100% calc(100% - var(--curve-size)),
+
+        calc(100% - var(--curve-size)) 100%,
+
+        0 100%);
+    transition: color 250ms;
+}
+
+nav ul li a.btn:hover {
+    color: #fff;
+    list-style: none;
+}
+
+/* Style pour le sous-menu */
+nav ul li ul.sub-menu {
+    display: none;
+    position: absolute;
+    background-color: transparent;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    top: 115%; 
+    left: -45%; 
+    border-radius: 0 0 5px 5px;
+    z-index: 1;
+}
+
+/* Style pour les éléments du sous-menu */
+nav ul li ul.sub-menu li {
+    padding: 4px;
+    text-align: left;
+}
+
+nav ul li ul.sub-menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 2px;
+}
+
+nav ul li ul.sub-menu li a:hover {
+    background-color: #846a86;
+}
+
+/* Affichez le sous-menu au survol du parent */
+nav ul li:hover ul.sub-menu {
+   display: block;
+    margin-top: 0;
+}
+
+nav ul li {
+    position: relative;
+    
+}
+
+header img {
+    display: block;
+    margin: 10px;
+    max-width: 110px;
+    height: auto;
+}
+
+header a {
+    text-decoration: none;
+}
+
+.card {
+    position: relative;
+    width: 190px;
+    height: 254px;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -5px;
+    margin: auto;
+    width: 200px;
+    height: 264px;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100% );
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100% );
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+}
+
+.heading {
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: 700;
+}
+
+.card p:not(.heading) {
+    font-size: 14px;
+}
+
+.card p:last-child {
+    color: #e81cff;
+    font-weight: 600;
+}
+
+.btn {
+    --border-color: linear-gradient(-45deg, #ffae00, #7e03aa, #00fffb);
+    --border-width: .125em;
+    --curve-size: .5em;
+    --blur: 30px;
+    --bg: #080312;
+    --color: #afffff;
+    color: var(--color);
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-content: center;
+    padding: .5em 1.5em;
+    font-size: 17px;
+    border: 0;
+    text-transform: uppercase;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, .6);
+    clip-path: polygon(
+         
+              0% var(--curve-size),
+  
+              var(--curve-size) 0,
+           
+              100% 0,
+              100% calc(100% - var(--curve-size)),
+  
+              calc(100% - var(--curve-size)) 100%,
+
+              0 100%);
+    transition: color 250ms;
+  }
+  
+  .btn::after,
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  
+  .btn::before {
+    background: var(--border-color);
+    background-size: 300% 300%;
+    animation: move-bg7234 5s ease infinite;
+    z-index: -2;
+  }
+  
+  @keyframes move-bg7234 {
+    0% {
+      background-position: 31% 0%
+    }
+  
+    50% {
+      background-position: 70% 100%
+    }
+  
+    100% {
+      background-position: 31% 0%
+    }
+  }
+  
+  .btn::after {
+    background: var(--bg);
+    z-index: -1;
+    clip-path: polygon(
+              var(--border-width) 
+              calc(var(--curve-size) + var(--border-width) * .5),
+  
+              calc(var(--curve-size) + var(--border-width) * .5) var(--border-width),
+  
+              calc(100% - var(--border-width)) 
+              var(--border-width),
+  
+              calc(100% - var(--border-width)) 
+              calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
+  
+              calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) calc(100% - var(--border-width)),
+              var(--border-width) calc(100% - var(--border-width)));
+    transition: clip-path 500ms;
+  }
+  
+  .btn:where(:hover, :focus)::after {
+    clip-path: polygon(
+                  calc(100% - var(--border-width)) 
+  
+                  calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5)),
+      
+                  calc(100% - var(--border-width))
+  
+                  var(--border-width),
+      
+                  calc(100% - var(--border-width))
+  
+                   var(--border-width),
+      
+                  calc(100% - var(--border-width)) 
+  
+                  calc(100% - calc(var(--curve-size) + var(--border-width) * .5)),
+      
+                  calc(100% - calc(var(--curve-size) + var(--border-width) * .5)) 
+                  calc(100% - var(--border-width)),
+  
+                  calc(100% - calc(var(--curve-size) + var(--border-width) * 0.5))
+                  calc(100% - var(--border-width)));
+    transition: 200ms;
+  }
+  
+  .btn:where(:hover, :focus) {
+    color: #fff;
+  }
+  .main-content {
+    min-height: 100vh; 
+}
+
+
+/* Style de l'image de profil */
+#userMenu img {
+    width: 70px; 
+    height: 70px; 
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+/* Reset de base pour assurer la cohérence entre les navigateurs */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Styliser le main */
+main {
+    margin: 20px;
+    text-align: center;
+    flex: 1;
+}
+
+
+/* Styles pour le footer LoL */
+footer {
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #222;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;    
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+.footer-links ul,
+.footer-social ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links ul li{
+    display: inline;
+    margin-right: 10px;
+}
+
+.footer-links ul li:last-child{
+    margin-right: 0;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    color: orangered;
+}
+
+.footer-bottom {
+    margin-top: 20px;
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+.footer-social {
+    margin-top: 20px;
+}
+
+.footer-social .button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.footer-social .button svg {
+    fill: white; 
+    height: 30px;
+    width: 30px;
+    transition: fill 0.3s ease;
+}
+
+.footer-social .button:hover svg {
+    fill: #1e90ff;
+}
+/* Social buttons */
+.parent {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .child {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+    border-radius: 50%;
+    margin: 0 5px;
+  }
+  
+  .child:hover {
+    background-color: white;
+    background-position: -100px 100px, -100px 100px;
+    transform: rotate3d(0.5, 1, 0, 30deg);
+    transform: perspective(180px) rotateX(60deg) translateY(2px);
+    box-shadow: 0px 10px 10px rgb(1, 49, 182);
+  }
+  
+  button {
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+  }
+  
+  .button:hover {
+    width: inherit;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate3d(0px, 0px, 15px) perspective(180px) rotateX(-35deg) translateY(2px);
+    border-radius: 50%;
+  }
+
+
+/* Styles pour la section newsletter */
+.footer-newsletter {
+    flex-basis: 40%;
+    background: #333;
+    color: #fff;
+    padding: 2em;
+    text-align: center;
+    width: 100%; 
+}
+
+.newsletter h2 {
+    margin-bottom: 20px;
+}
+
+.newsletter form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.newsletter input[type="email"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.newsletter button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: purple;
+    color: white;
+    cursor: pointer;
+}
+
+.newsletter button:hover {
+    background-color: orangered;
+}
+
+
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* bouton jouer */
+.style_bouton {
+    padding: 15px 30px;
+    background-color: purple;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-top: 20px;
+    border: 2px solid black; 
+    display: inline-block; 
+}
+
+/* titre de la page d'accueil */
+.heading {
+    font-family: 'Press Start 2P', cursive; 
+    font-family: 'Exo 2', sans-serif;
+    font-size: 36px;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 20px;
+    border: 3px double white;
+    padding: 10px;
+    transition: background-color 0.5s ease-in-out;
+    animation: fadeInUpTitle 1s ease-in-out;
+}
+@keyframes fadeInUpTitle {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+  
+.paragraphe {
+    margin-top: 30px; 
+    font-size: 14px;    
+    color: #777;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+
+/* style des descriptions des images*/
+.image-description {
+    text-align: justify;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #ddd;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.image-description:hover {
+    color: #fff;
+}
+
+/* style du texte*/
+.description {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 24px;
+    color: white; 
+    text-align: center; 
+    margin-top: 10px; 
+    z-index: 3; 
+    position: relative; 
+}
+
+/* Style pour les images de la page d'accueil avec annimation */
+.img-profil {
+    max-width: 500px;
+    height: auto;
+    margin: 20px;
+    margin-bottom: 100px;
+}
+
+@keyframes slideInFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.img-profil.show {
+    animation: slideInFromRight 1s ease-in-out;
+}
+ 
+/* bouton decouvrir */
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+   }
+   
+   button.learn-more {
+    width: 12rem;
+    height: auto;
+   }
+   
+   button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    background: #282936;
+    border-radius: 1.625rem;
+   }
+   
+   button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff;
+   }
+   
+   button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.625rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+   }
+   
+   button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+    transform: rotate(45deg);
+   }
+   
+   button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+    color: white;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+   }
+   
+   button:hover .circle {
+    width: 100%;
+   }
+   
+   button:hover .circle .icon.arrow {
+    background: #fff;
+    transform: translate(1rem, 0);
+   }
+   
+   button:hover .button-text {
+    color: #fff;
+   }

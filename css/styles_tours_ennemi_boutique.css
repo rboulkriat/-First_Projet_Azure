@@ -1,0 +1,147 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: auto;
+  background: linear-gradient(45deg, #000000, #220033, #220055, #220077, #ff00ff, #00ffff); 
+  background-size: 500% 500%;
+  animation: gradientAnimation 10s ease infinite;
+  z-index: 2;
+  position: relative;
+}
+
+@keyframes gradientAnimation {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+.content-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.card-boutique {
+  background-color: #070404;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.card-boutique:hover {
+  transform: scale(1.5);
+}
+
+.card-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.card-boutique h2 {
+  color: #f8f7f6;
+  margin-bottom: 10px;
+}
+.descriptionBombe, .audio-player {
+  display: none; 
+}
+
+.card-boutique:hover .descriptionBombe, 
+.card-boutique:hover .audio-player {
+  display: block; 
+}
+.descriptionHydro, .audio-player {
+  display: none;
+}
+
+.card-boutique:hover .descriptionHydro, 
+.card-boutique:hover .audio-player {
+  display: block; 
+} 
+.descriptionMur, .audio-player {
+  display: none; 
+}
+
+.card-boutique:hover .descriptionMur, 
+.card-boutique:hover .audio-player {
+  display: block; 
+}
+p {
+font-family: 'Arial', sans-serif;
+font-size: 16px;
+line-height: 1.5;
+color: #f3f5f7;
+
+margin-bottom: 15px;
+}
+
+p.intro {
+font-size: 18px;
+color: #f9f5f9;
+margin-bottom: 20px;
+border: 2px solid #f7f2f6; 
+padding: 10px; 
+border-radius: 8px; 
+font-weight: bold;
+background-color: rgba(52, 152, 219, 0.1); 
+}
+
+p.highlight {
+background-color: #ecf0f1;
+padding: 10px;
+border-radius: 5px;
+display: inline;
+color: #e74c3c;
+font-style: italic;
+}
+
+.rules-container {
+  margin-top: 20px;
+  padding: 10px;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  background-color: rgba(242, 242, 242, 0.2);
+}
+
+.rules-container p {
+  margin-bottom: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  font-style: italic; 
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}

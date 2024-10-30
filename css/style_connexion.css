@@ -1,0 +1,421 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: auto; 
+    background: #000;
+    z-index: 2;
+    position: relative;
+}
+
+
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        270deg,
+        rgba(0, 0, 0, 0.8), 
+        rgba(75, 0, 130, 0.8), 
+        rgba(0, 0, 0, 0.8) 
+    );
+    background-size: 400% 400%;
+    animation: moveGradient 10s ease infinite;
+    
+}
+
+@keyframes moveGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.conteneur-formulaire {
+    position: relative; 
+    z-index: 2;
+}
+
+.connexion-form, .inscription-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 300px; /* Ajustez la largeur maximale selon vos besoins */
+    background-color: rgba(255, 255, 255, 0.1); /* Ajoutez une légère transparence */
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 50px; /* Ajoutez une marge supérieure pour centrer le formulaire */
+    z-index: 2;
+    position: relative; 
+}
+
+.inscription-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.inscription-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 2;
+    position: relative; 
+}
+
+/* Styles pour les boutons */
+.submit {
+    color: #9fc4d0;
+    text-decoration: none;
+    font-size: 20px;
+    border: none;
+    background: none;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    margin: 5px 0 0;
+    margin-top: 10px;
+}
+
+.submit::before {
+    margin-left: auto;
+}
+
+.submit::after,
+.submit::before {
+    content: "";
+    width: 0%;
+    height: 2px;
+    background: #06aed8;
+    display: block;
+    transition: 0.5s;
+}
+
+.submit:hover::after,
+.submit:hover::before {
+    width: 100%;
+}
+
+/* Styles pour les conteneurs de formulaire */
+.container {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-style: italic;
+    font-weight: bold;
+    display: flex;
+    margin: top;
+    aspect-ratio: 16/9;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1em;
+    margin-top: 0;
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35vh; /* Ajustez la hauteur selon vos besoins */
+    background: rgba(0, 0, 0, 0.8); /* Fond semi-transparent (facultatif) */
+    flex-direction: column; /* Changez la direction en colonne */
+    align-items: center; /* Centre les éléments verticalement */
+    text-align: center;
+    margin-bottom: 100px; 
+    
+
+}
+
+/* Styles pour les champs de saisie */
+.input-container {
+    filter: drop-shadow(46px 36px 24px #4090b5)
+        drop-shadow(-55px -40px 25px #9e30a9);
+    animation: blinkShadowsFilter 8s ease-in infinite;
+}
+
+.input-content {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    padding-inline: 1em;
+}
+
+.input-content::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: blur(40px);
+    -webkit-clip-path: polygon(
+        26% 0,
+        66% 0,
+        92% 0,
+        100% 8%,
+        100% 89%,
+        91% 100%,
+        7% 100%,
+        0 92%,
+        0 0
+    );
+    clip-path: polygon(
+        26% 0,
+        66% 0,
+        92% 0,
+        100% 8%,
+        100% 89%,
+        91% 100%,
+        7% 100%,
+        0 92%,
+        0 0
+    );
+    background: rgba(122, 251, 255, 0.5568627451);
+    transition: all 1s ease-in-out;
+}
+
+.input-content::after {
+    content: "";
+    position: absolute;
+    width: 98%;
+    height: 98%;
+    box-shadow: inset 0px 0px 20px 20px #212121;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(64, 144, 181, 0.6) 1px,
+        rgb(0, 0, 0) 3px,
+        hsl(295, 60%, 12%) 5px,
+        #153544 4px,
+        transparent 0.5%
+    ),
+    repeating-linear-gradient(
+        to left,
+        hsl(295, 60%, 12%) 100%,
+        hsla(295, 60%, 12%, 0.99) 100%
+    );
+    -webkit-clip-path: polygon(
+        26% 0,
+        31% 5%,
+        61% 5%,
+        66% 0,
+        92% 0,
+        100% 8%,
+        100% 89%,
+        91% 100%,
+        7% 100%,
+        0 92%,
+        0 0
+    );
+    clip-path: polygon(
+        26% 0,
+        31% 5%,
+        61% 5%,
+        66% 0,
+        92% 0,
+        100% 8%,
+        100% 89%,
+        91% 100%,
+        7% 100%,
+        0 92%,
+        0 0
+    );
+    animation: backglitch 50ms linear infinite;
+}
+
+.input-dist {
+    z-index: 80;
+    display: grid;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding-inline: 1em;
+    padding-block: 1.2em;
+    grid-template-columns: 1fr;
+}
+
+.input-type {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 1em;
+    font-size: 1.1rem;
+    background-color: transparent;
+    width: 100%;
+    border: none;
+}
+
+.input-is {
+    color: #fff;
+    font-size: 0.9rem;
+    background-color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    transition: all 1s ease-in-out;
+    border-bottom: 1px solid hsl(221, 26%, 43%);
+}
+
+.input-is:hover {
+    transition: all 1s ease-in-out;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(102, 224, 255, 0.2) 27%,
+        rgba(102, 224, 255, 0.2) 63%,
+        transparent 100%
+    );
+}
+
+.input-content:focus-within::before {
+    transition: all 1s ease-in-out;
+    background: hsla(0, 0%, 100%, 0.814);
+}
+
+.input-is:focus {
+    outline: none;
+    border-bottom: 1px solid hsl(192, 100%, 100%);
+    color: hsl(192, 100%, 88%);
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(102, 224, 255, 0.2) 27%,
+        rgba(102, 224, 255, 0.2) 63%,
+        transparent 100%
+    );
+}
+
+.input-is::-moz-placeholder {
+    color: hsla(192, 100%, 88%, 0.806);
+}
+
+.input-is::placeholder {
+    color: hsla(192, 100%, 88%, 0.806);
+}
+
+@keyframes backglitch {
+    0% {
+        box-shadow: inset 0px 20px 20px 30px #212121;
+    }
+
+    50% {
+        box-shadow: inset 0px -20px 20px 30px hsl(297, 42%, 10%);
+    }
+
+    to {
+        box-shadow: inset 0px 20px 20px 30px #212121;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg) translate(-50%, 20%);
+    }
+
+    50% {
+        transform: rotate(180deg) translate(40%, 10%);
+    }
+
+    to {
+        transform: rotate(360deg) translate(-50%, 20%);
+    }
+}
+
+@keyframes blinkShadowsFilter {
+    0% {
+        filter: drop-shadow(46px 36px 28px rgba(64, 144, 181, 0.3411764706))
+            drop-shadow(-55px -40px 28px #9e30a9);
+    }
+
+    25% {
+        filter: drop-shadow(46px -36px 24px rgba(64, 144, 181, 0.8980392157))
+            drop-shadow(-55px 40px 24px #9e30a9);
+    }
+
+    50% {
+        filter: drop-shadow(46px 36px 30px rgba(64, 144, 181, 0.8980392157))
+            drop-shadow(-55px 40px 30px rgba(159, 48, 169, 0.2941176471));
+    }
+
+    75% {
+        filter: drop-shadow(20px -18px 25px rgba(64, 144, 181, 0.8980392157))
+            drop-shadow(-20px 20px 25px rgba(159, 48, 169, 0.2941176471));
+    }
+
+    to {
+        filter: drop-shadow(46px 36px 28px rgba(64, 144, 181, 0.3411764706))
+            drop-shadow(-55px -40px 28px #9e30a9);
+    }
+}
+p{
+    margin-top: 10px; /* Ajoutez de la marge au-dessus du lien */
+    z-index: 2; /* Ajouté ici */
+    position: relative;
+}
+/* Style pour le titre avec animation */
+h3{
+    font-family: "Justus Pro", sans-serif; /* Police de caractères Roboto */
+    font-size: 36px; /* Taille de police */
+    font-weight: bold; /* Police en gras */
+    color: #b6b1a9; /* Couleur du texte (orange vif) */
+    text-align: center;
+    margin-top: 20px; /* Espacement du haut */
+    margin-bottom: 50px; /* Espacement du bas */
+    animation: bounce 1s ease infinite; /* Animation de rebond */
+}
+
+/* Animation de rebond */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+.welcome-message {
+    text-align: center;
+    color: #fff; /* Adaptez cette couleur à votre thème */
+    margin: 20px auto;
+    margin-bottom: 30px; 
+    padding:10px; /* Augmentez le padding pour plus d'espace à l'intérieur */
+    border: 3px solid transparent;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.3);
+    animation: animatedBorder 3s linear infinite;
+    width: 80%; /* Ajustez la largeur selon vos besoins */
+    max-width: 2000px; /* Ou une valeur fixe si vous préférez */
+    font-size: 1em; /* Ajustez la taille de la police si nécessaire */
+    font-style: italic; 
+    top: -10px;
+}
+
+@keyframes animatedBorder {
+    0% { border-color: rgb(188, 59, 156); }
+    33% { border-color: rgb(21, 145, 173); }
+    66% { border-color: rgb(13, 3, 211); }
+    100% { border-color: rgb(8, 201, 5); }
+}
+
+

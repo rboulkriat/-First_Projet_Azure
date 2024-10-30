@@ -1,0 +1,54 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: auto;
+    background: linear-gradient(45deg, #000000, #220033, #220055, #220077, #ff00ff, #00ffff); 
+    background-size: 500% 500%;
+    animation: gradientAnimation 10s ease infinite;
+    z-index: 2;
+    position: relative;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.resultats-recherche {
+    margin-top: 20px;
+}
+
+.joueur {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-joueur {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.lien-stats {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.lien-stats:hover {
+    background-color: #45a049;
+}

@@ -1,0 +1,30 @@
+.stat-carte {
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.titre-carte {
+    background-color: black;
+    margin: 0;
+    padding: 10px;
+    font-size: 1.1em;
+}
+
+.contenu-carte {
+    max-height: 0;
+    display: none;
+    padding: 10px;
+    transition: max-height 1.5 ease;
+}
+
+.stat-carte:hover .contenu-carte {
+    display: block;
+    max-height: 500px; 
+}
+
+.stat-carte:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
