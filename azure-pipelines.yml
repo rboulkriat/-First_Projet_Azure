@@ -1,26 +1,51 @@
-# PHP
-# Test and package your PHP project.
-# Add steps that run tests, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
 trigger:
-- main
+  branches:
+    include:
+      - feature-pipeline
 
 pool:
-  vmImage: ubuntu-latest
-
-variables:
-  phpVersion: 8.1
+  vmImage: 'ubuntu-latest'
 
 steps:
-- script: |
-    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-    php -version
-  displayName: 'Use PHP version $(phpVersion)'
+  # Connexion à Azure
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'Pay as you go'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Variables
+        RESOURCE_GROUP="rg-interstellar-havoc"
+        LB_NAME="MyPublicLoadBalancer"
+        BACKEND_POOL_NAME="myBackEndPool"
+        VM1_NIC_NAME="vm1559_z2"
+        VM2_NIC_NAME="vm2478_z1"
 
-- script: composer install --no-interaction --prefer-dist
-  displayName: 'composer install'
+        echo "Vérification de l'état du Load Balancer..."
+        az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "{name:name, location:location, provisioningState:provisioningState}" -o table
+
+        echo "Vérification du Backend Pool du Load Balancer..."
+        az network lb address-pool show --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --name $BACKEND_POOL_NAME --query "{name:name, id:id}" -o table
+
+        echo "Vérification des VM associées au Load Balancer..."
+        az network nic show --resource-group $RESOURCE_GROUP --name $VM1_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
+        az network nic show --resource-group $RESOURCE_GROUP --name $VM2_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
+
+        echo "Vérification de l'état des VM..."
+        az vm list -d --resource-group $RESOURCE_GROUP --query "[].{Name:name, PowerState:powerState}" -o table
+
+  # Optionnel : Vérifier la disponibilité du site web si l'application est déployée sur les VM
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'Pay as you go'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Remplacez "IP_VM1" et "IP_VM2" par les IP publiques de vos VMs si elles sont accessibles publiquement
+        IP_VM1="172.203.225.108"
+        IP_VM2="20.121.129.244"
+
+        echo "Vérification de l'accès au site sur les VM..."
+        curl -I http://$IP_VM1
+        curl -I http://$IP_VM2
