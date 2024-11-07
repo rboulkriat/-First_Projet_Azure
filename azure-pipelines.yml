@@ -38,7 +38,7 @@ steps:
   # Optionnel : Vérifier la disponibilité du site web si l'application est déployée sur les VM
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'Pay as you go'
+      azureSubscription: 'pay_as_you_go'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
