@@ -5,7 +5,7 @@ trigger:
       - feature-pipeline
 
 pool:
-  name: Default
+  vmImage: 'windows-latest' 
 
 steps:
   # Connexion à Azure
