@@ -5,7 +5,7 @@ trigger:
       - feature-pipeline
 
 pool:
-  vmImage: 'windows-latest' 
+  name: Agent_Pool 
 
 steps:
   # Connexion à Azure
