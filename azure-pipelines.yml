@@ -1,62 +1,62 @@
+
 trigger:
   branches:
     include:
-      - feature-pipeline
+      - feature-deploiement
 
 pool:
-  name: Agent_Pool 
+  name: Agent_Pool
 
 steps:
-  # Connexion à Azure
+  # Étape de connexion à Azure
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'pay_as_you_go'
+      azureSubscription: 'pay_as_you_go'  # Assurez-vous que ce nom correspond à votre connexion de service
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Variables
         $RESOURCE_GROUP="rg-interstellar-havoc"
         $LB_NAME="MyPublicLoadBalancer"
-        $BACKEND_POOL_NAME="myBackEndPool"
-        $VM1_NIC_NAME="vm1559_z2"
-        $VM2_NIC_NAME="vm2478_z1"
+        $VM1_NAME="vm1559_z2"
+        $VM2_NAME="vm2478_z1"
 
-        echo "Vérification de l'état du Load Balancer..."
-        az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "{name:name, location:location, provisioningState:provisioningState}" -o table
-
-        echo "Vérification du Backend Pool du Load Balancer..."
-        az network lb address-pool show --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --name $BACKEND_POOL_NAME --query "{name:name, id:id}" -o table
-
-        echo "Vérification des VM associées au Load Balancer..."
-        az network nic show --resource-group $RESOURCE_GROUP --name $VM1_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
-        az network nic show --resource-group $RESOURCE_GROUP --name $VM2_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
-
-        echo "Vérification de l'état des VM..."
-        az vm list -d --resource-group $RESOURCE_GROUP --query "[].{Name:name, PowerState:powerState}" -o table
-
-  # Optionnel : Vérifier la disponibilité du site web si l'application est déployée sur les VM
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: 'pay_as_you_go'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Remplacez "IP_VM1" et "IP_VM2" par les IP publiques de vos VMs si elles sont accessibles publiquement
-        $IP_VM1 = "172.203.225.108"  # Assure-toi que cette IP est valide
-        $IP_VM2 = "20.121.129.244"    # Assure-toi que cette IP est valide
-
-        Write-Host "Vérification de l'accès au site sur les VM..."
-        try {
-          # Vérifie l'accès au site sur VM1
-          $response1 = Invoke-WebRequest -Uri "http://$IP_VM1" -UseBasicP -ErrorAction Stop
-          Write-Host "Réponse de VM1 : $($response1.StatusCode)"
-        } catch {
-          Write-Host "Erreur lors de l'accès à VM1 : $_"
+        # Créer un Load Balancer s'il n'existe pas déjà
+        echo "Vérification de l'existence du Load Balancer..."
+        $lbExists = az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "name" -o tsv
+        
+        if (-not $lbExists) {
+          echo "Création du Load Balancer..."
+          # Commande pour créer le Load Balancer, personnalise selon tes besoins
+          az network lb create --resource-group $RESOURCE_GROUP --name $LB_NAME --sku Standard --frontend-ip-name MyFrontEnd --backend-pool-name myBackEndPool
+        } else {
+          echo "Le Load Balancer existe déjà."
         }
 
-        try {
-          $response2 = Invoke-WebRequest -Uri "http://$IP_VM2" -UseBasicP -ErrorAction Stop
-          Write-Host "Réponse de VM2 : $($response2.StatusCode)"
-        } catch {
-          Write-Host "Erreur lors de l'accès à VM2 : $_"
+        # Déployer les VM si elles n'existent pas
+        echo "Vérification des VMs..."
+        $vm1Exists = az vm show --resource-group $RESOURCE_GROUP --name $VM1_NAME --query "name" -o tsv
+        $vm2Exists = az vm show --resource-group $RESOURCE_GROUP --name $VM2_NAME --query "name" -o tsv
+        
+        if (-not $vm1Exists) {
+          echo "Création de la VM 1..."
+          # Commande pour créer la VM 1, personnalise selon tes besoins
+          az vm create --resource-group $RESOURCE_GROUP --name $VM1_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
+        } else {
+          echo "La VM 1 existe déjà."
         }
+
+        if (-not $vm2Exists) {
+          echo "Création de la VM 2..."
+          # Commande pour créer la VM 2, personnalise selon tes besoins
+          az vm create --resource-group $RESOURCE_GROUP --name $VM2_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
+        } else {
+          echo "La VM 2 existe déjà."
+        }
+
+        # Association des NICs au Load Balancer
+        echo "Association des NICs au Load Balancer..."
+        az network nic ip-config address-pool add --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --nic-name $VM1_NAME --ip-config-name ipconfig1 --address-pool myBackEndPool
+        az network nic ip-config address-pool add --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --nic-name $VM2_NAME --ip-config-name ipconfig1 --address-pool myBackEndPool
+
+        echo "Déploiement terminé."
