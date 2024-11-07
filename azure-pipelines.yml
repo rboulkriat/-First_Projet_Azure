@@ -16,11 +16,11 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Variables
-        RESOURCE_GROUP="rg-interstellar-havoc"
-        LB_NAME="MyPublicLoadBalancer"
-        BACKEND_POOL_NAME="myBackEndPool"
-        VM1_NIC_NAME="vm1559_z2"
-        VM2_NIC_NAME="vm2478_z1"
+        $RESOURCE_GROUP="rg-interstellar-havoc"
+        $LB_NAME="MyPublicLoadBalancer"
+        $BACKEND_POOL_NAME="myBackEndPool"
+        $VM1_NIC_NAME="vm1559_z2"
+        $VM2_NIC_NAME="vm2478_z1"
 
         echo "Vérification de l'état du Load Balancer..."
         az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "{name:name, location:location, provisioningState:provisioningState}" -o table
@@ -43,8 +43,8 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Remplacez "IP_VM1" et "IP_VM2" par les IP publiques de vos VMs si elles sont accessibles publiquement
-        IP_VM1="172.203.225.108"
-        IP_VM2="20.121.129.244"
+        $IP_VM1="172.203.225.108"
+        $IP_VM2="20.121.129.244"
 
         echo "Vérification de l'accès au site sur les VM..."
         curl -I http://$IP_VM1
