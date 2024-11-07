@@ -11,7 +11,7 @@ steps:
   # Connexion à Azure
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'Pay as you go'
+      azureSubscription: 'pay_as_you_go'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
