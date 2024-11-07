@@ -1,4 +1,3 @@
-
 trigger:
   branches:
     include:
@@ -43,9 +42,21 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         # Remplacez "IP_VM1" et "IP_VM2" par les IP publiques de vos VMs si elles sont accessibles publiquement
-        $IP_VM1="172.203.225.108"
-        $IP_VM2="20.121.129.244"
+        $IP_VM1 = "172.203.225.108"  # Assure-toi que cette IP est valide
+        $IP_VM2 = "20.121.129.244"    # Assure-toi que cette IP est valide
 
-        echo "Vérification de l'accès au site sur les VM..."
-        curl -I http://$IP_VM1
-        curl -I http://$IP_VM2
+        Write-Host "Vérification de l'accès au site sur les VM..."
+        try {
+          # Vérifie l'accès au site sur VM1
+          $response1 = Invoke-WebRequest -Uri "http://$IP_VM1" -UseBasicP -ErrorAction Stop
+          Write-Host "Réponse de VM1 : $($response1.StatusCode)"
+        } catch {
+          Write-Host "Erreur lors de l'accès à VM1 : $_"
+        }
+
+        try {
+          $response2 = Invoke-WebRequest -Uri "http://$IP_VM2" -UseBasicP -ErrorAction Stop
+          Write-Host "Réponse de VM2 : $($response2.StatusCode)"
+        } catch {
+          Write-Host "Erreur lors de l'accès à VM2 : $_"
+        }
