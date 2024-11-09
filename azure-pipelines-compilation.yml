@@ -7,17 +7,57 @@ pool:
   name: Agent_Pool
 
 steps:
-  # Étape 1 : Vérification de l'accessibilité du fichier index.php via HTTP
+  # Étape 1 : Installation des dépendances PHP avec Composer (si applicable)
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '7.x'  # Remplacez par la version PHP appropriée pour votre projet
+
+  - script: |
+      curl -sS https://getcomposer.org/installer | php
+      php composer.phar install
+    displayName: 'Installer les dépendances PHP avec Composer'
+
+  # Étape 2 : Copier les fichiers PHP pour le déploiement
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'  # Copier tous les fichiers du projet
+      Contents: '**/*'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/php-app'
+
+  # Étape 3 : Publier les fichiers PHP en tant qu'artefacts
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/php-app'
+      artifactName: 'php-app'
+
+  # Étape 4 : Déployer les fichiers sur les VMs via HTTP ou SSH
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Adresses IP des VMs où l'application doit être accessible via HTTP
+        $RESOURCE_GROUP="rg-interstellar-havoc"
+        $VM1_IP="172.203.225.108"
+        $VM2_IP="20.121.129.244"
+        $WEB_APP_PATH="/var/www/html"
+
+        echo "Déploiement des fichiers PHP sur les machines virtuelles..."
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM1_IP:$WEB_APP_PATH
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM2_IP:$WEB_APP_PATH
+        echo "Déploiement terminé."
+
+  # Étape 5 : Validation de l’accessibilité de index.php
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'pay_as_you_go'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         $IP_VM1 = "172.203.225.108"
         $IP_VM2 = "20.121.129.244"
-        $MAIN_FILE = "index.php"  # Fichier principal à vérifier
+        $MAIN_FILE = "index.php"
 
         Write-Host "Vérification de l'accès à $MAIN_FILE via HTTP sur les VMs..."
 
