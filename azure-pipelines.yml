@@ -7,14 +7,22 @@ pool:
   name: Agent_Pool  # Utilise votre pool d’agents personnalisé
 
 steps:
-  # Étape 1 : Installer Java avec JavaToolInstaller
+  # Étape 1 : Installer Maven sur l'agent (si Maven n'est pas déjà installé)
+  - task: Maven@3
+    inputs:
+      mavenVersionOption: 'Default'
+      mavenDirectory: '/usr/share/maven'  # Spécifiez ici le chemin pour installer Maven
+      goals: 'validate'
+    displayName: 'Installer Maven sur l’agent'
+
+  # Étape 2 : Installer Java avec JavaToolInstaller
   - task: JavaToolInstaller@0
     inputs:
       versionSpec: '11'  # Utilise Java 11, modifiez en fonction des besoins du projet
       jdkArchitectureOption: 'x64'
     displayName: 'Installer Java 11'
 
-  # Étape 2 : Compiler et packager avec Maven
+  # Étape 3 : Compiler et packager avec Maven
   - task: Maven@3
     inputs:
       mavenPomFile: 'pom.xml'  # Fichier POM Maven pour le projet Java
@@ -25,14 +33,14 @@ steps:
       mavenVersionOption: 'Default'
     displayName: 'Compiler et packager avec Maven'
 
-  # Étape 3 : Publier l'artefact compilé
+  # Étape 4 : Publier l'artefact compilé
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: '$(System.DefaultWorkingDirectory)/target'  # Dossier où Maven produit le JAR ou WAR
       artifactName: 'java-app'
     displayName: 'Publier l’artefact pour le déploiement'
 
-  # Étape 4 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
+  # Étape 5 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
