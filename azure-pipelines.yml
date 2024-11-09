@@ -26,20 +26,15 @@ steps:
       echo "Java installé avec succès"
     displayName: 'Installer Java 11 sur l’agent'
 
-  # Étape 3 : Compiler et packager avec Maven via un script personnalisé
-  - script: |
-      echo "Compilation du projet avec Maven..."
-      C:\maven\apache-maven-3.8.4\bin\mvn -f pom.xml clean package -B
-    displayName: 'Compiler et packager avec Maven'
 
-  # Étape 4 : Publier l'artefact compilé
+  # Étape 3 : Publier l'artefact compilé
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: '$(System.DefaultWorkingDirectory)\target'  # Dossier où Maven produit le JAR ou WAR
       artifactName: 'java-app'
     displayName: 'Publier l’artefact pour le déploiement'
 
-  # Étape 5 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
+  # Étape 4 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
