@@ -16,13 +16,15 @@ steps:
       echo "Maven installé avec succès"
     displayName: 'Installer Maven sur l’agent'
 
-  # Étape 2 : Installer Java avec JavaToolInstaller
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '11'  # Utilise Java 11, modifiez en fonction des besoins du projet
-      jdkArchitectureOption: 'x64'
-      jdkSourceOption: 'Preinstalled'  # Télécharge Java depuis la cache d'outils Azure DevOps
-    displayName: 'Installer Java 11'
+  # Étape 2 : Installer Java manuellement en téléchargeant l'archive ZIP
+  - script: |
+      echo "Téléchargement et installation de Java..."
+      curl -L -o openjdk-11.zip https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_windows-x64_bin.zip
+      powershell -Command "Expand-Archive -Path openjdk-11.zip -DestinationPath C:\openjdk-11"
+      set JAVA_HOME=C:\openjdk-11
+      set PATH=%JAVA_HOME%\bin;%PATH%
+      echo "Java installé avec succès"
+    displayName: 'Installer Java 11 sur l’agent'
 
   # Étape 3 : Compiler et packager avec Maven via un script personnalisé
   - script: |
