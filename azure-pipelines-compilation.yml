@@ -7,53 +7,19 @@ pool:
   name: Agent_Pool
 
 steps:
-  # Étape 1 : Copier tous les fichiers PHP pour le déploiement
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: '$(Build.SourcesDirectory)'  # Copie tous les fichiers du projet
-      Contents: '**/*'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/php-app'
-
-  # Étape 2 : Publier l'artefact PHP
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)/php-app'
-      artifactName: 'php-app'
-
-  # Étape 3 : Déployer tous les fichiers PHP sur les ressources Azure
+  # Étape 1 : Vérification de l'accessibilité du fichier index.php via HTTP
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Variables de déploiement
-        $RESOURCE_GROUP="rg-interstellar-havoc"
-        $VM1_NAME="vm1559_z2"
-        $VM2_NAME="vm2478_z1"
-        $WEB_APP_PATH='/var/www/html'  # Emplacement de déploiement pour les fichiers PHP
-
-        # Copier les fichiers sur les VMs (corrigé pour PowerShell)
-        echo "Déploiement des fichiers PHP sur les machines virtuelles..."
-        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@${VM1_NAME}:$WEB_APP_PATH
-        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@${VM2_NAME}:$WEB_APP_PATH
-
-
-        echo "Déploiement terminé. Validation en cours..."
-
-  # Étape 4 : Vérifier que le fichier principal (index.php) est accessible
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: 'pay_as_you_go'
-      scriptType: 'ps'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # Adresses IP des VMs où le site doit être accessible
+        # Adresses IP des VMs où l'application doit être accessible via HTTP
         $IP_VM1 = "172.203.225.108"
         $IP_VM2 = "20.121.129.244"
-        $MAIN_FILE = "index.php"  # Fichier principal de votre application
+        $MAIN_FILE = "index.php"  # Fichier principal à vérifier
 
-        Write-Host "Vérification de l'accès à $MAIN_FILE sur les VMs..."
+        Write-Host "Vérification de l'accès à $MAIN_FILE via HTTP sur les VMs..."
 
         try {
           $response1 = Invoke-WebRequest -Uri "http://$IP_VM1/$MAIN_FILE" -UseBasicParsing -ErrorAction Stop
