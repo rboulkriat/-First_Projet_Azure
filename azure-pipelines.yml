@@ -26,7 +26,6 @@ steps:
       echo "Java installé avec succès"
     displayName: 'Installer Java 11 sur l’agent'
 
-
   # Étape 3 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
   - task: AzureCLI@2
     inputs:
@@ -43,7 +42,7 @@ steps:
 
         # Vérifie si l'application est accessible sur VM1
         try {
-          $response1 = Invoke-WebRequest -Uri "http://$VM1_IP:$APP_PORT" -UseBasicParsing
+          $response1 = Invoke-WebRequest -Uri "http://${VM1_IP}:${APP_PORT}" -UseBasicParsing
           Write-Host "L'application est accessible sur VM1"
         } catch {
           Write-Host "Erreur : L'application n'est pas accessible sur VM1"
@@ -52,7 +51,7 @@ steps:
 
         # Vérifie si l'application est accessible sur VM2
         try {
-          $response2 = Invoke-WebRequest -Uri "http://$VM2_IP:$APP_PORT" -UseBasicParsing
+          $response2 = Invoke-WebRequest -Uri "http://${VM2_IP}:${APP_PORT}" -UseBasicParsing
           Write-Host "L'application est accessible sur VM2"
         } catch {
           Write-Host "Erreur : L'application n'est pas accessible sur VM2"
