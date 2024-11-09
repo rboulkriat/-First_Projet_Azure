@@ -27,14 +27,7 @@ steps:
     displayName: 'Installer Java 11 sur l’agent'
 
 
-  # Étape 3 : Publier l'artefact compilé
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(System.DefaultWorkingDirectory)\target'  # Dossier où Maven produit le JAR ou WAR
-      artifactName: 'java-app'
-    displayName: 'Publier l’artefact pour le déploiement'
-
-  # Étape 4 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
+  # Étape 3 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
