@@ -5,25 +5,23 @@ trigger:
 
 pool:
   name: Agent_Pool
-
 steps:
-  # Étape 1 : Installation des dépendances PHP avec Composer (si applicable)
+  # Étape 1 : Installer Composer directement à partir du fichier d'installation
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '7.x'  # Remplacez par la version PHP appropriée pour votre projet
+      version: '7.x'  # Assurez-vous que PHP est configuré correctement
 
   - script: |
-      curl -sS https://getcomposer.org/installer | php
-      php composer.phar install
-    displayName: 'Installer les dépendances PHP avec Composer'
+      echo "Téléchargement et installation de Composer"
+      curl -sS https://getcomposer.org/installer -o composer-setup.php
+      php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    displayName: 'Télécharger et installer Composer'
 
-  # Étape 2 : Copier les fichiers PHP pour le déploiement
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: '$(Build.SourcesDirectory)'  # Copier tous les fichiers du projet
-      Contents: '**/*'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/php-app'
+  # Étape 2 : Exécuter Composer pour installer les dépendances
+  - script: |
+      composer install
+    displayName: 'Installer les dépendances PHP avec Composer'
 
   # Étape 3 : Publier les fichiers PHP en tant qu'artefacts
   - task: PublishBuildArtifacts@1
