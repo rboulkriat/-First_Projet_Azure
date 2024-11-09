@@ -23,16 +23,10 @@ steps:
       jdkArchitectureOption: 'x64'
     displayName: 'Installer Java 11'
 
-  # Étape 3 : Compiler et packager avec Maven
-  - task: Maven@3
-    inputs:
-      mavenPomFile: 'pom.xml'  # Fichier POM Maven pour le projet Java
-      goals: 'package'  # Exécute la tâche 'package' pour compiler et packager le projet
-      options: '-B'  # Mode batch pour les pipelines
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'  # Version de Java pour Maven
-      mavenVersionOption: 'Path'
-      mavenDirectory: '/usr/share/apache-maven-3.8.4'
+  # Étape 3 : Compiler et packager avec Maven via un script personnalisé
+  - script: |
+      echo "Compilation du projet avec Maven..."
+      /usr/share/apache-maven-3.8.4/bin/mvn -f pom.xml clean package -B
     displayName: 'Compiler et packager avec Maven'
 
   # Étape 4 : Publier l'artefact compilé
