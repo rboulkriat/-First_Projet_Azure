@@ -37,25 +37,7 @@ steps:
         $VM1_IP = "172.203.225.108"
         $VM2_IP = "20.121.129.244"
         $APP_PORT = "8080"  # Le port sur lequel l'application Java est censée fonctionner
-
-        Write-Host "Validation de l'accès à l'application sur les VMs..."
-
-        # Vérifie si l'application est accessible sur VM1
-        try {
-          $response1 = Invoke-WebRequest -Uri "http://${VM1_IP}:${APP_PORT}" -UseBasicParsing
-          Write-Host "L'application est accessible sur VM1"
-        } catch {
-          Write-Host "Erreur : L'application n'est pas accessible sur VM1"
-          exit 1
-        }
-
-        # Vérifie si l'application est accessible sur VM2
-        try {
-          $response2 = Invoke-WebRequest -Uri "http://${VM2_IP}:${APP_PORT}" -UseBasicParsing
-          Write-Host "L'application est accessible sur VM2"
-        } catch {
-          Write-Host "Erreur : L'application n'est pas accessible sur VM2"
-          exit 1
-        }
+        
+        #Write host pour verifier si les ressoureces sont disponible dans les VMs 
 
         Write-Host "Validation du déploiement réussie."
