@@ -7,7 +7,7 @@ pool:
   name: Agent_Pool  # Utilise votre pool d’agents personnalisé
 
 steps:
-  # Étape 1 : Transférer les fichiers de l’application sur les machines virtuelles
+   # Étape 1 : Transférer les fichiers de l’application sur les machines virtuelles
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
@@ -24,13 +24,13 @@ steps:
         echo "Déploiement de l’application Java sur les machines virtuelles..."
 
         # Transférer les fichiers de l’application sur VM1 et VM2
-        scp -r $SOURCE_PATH/* user@$VM1_IP:$APP_PATH
-        scp -r $SOURCE_PATH/* user@$VM2_IP:$APP_PATH
+        scp -r ${SOURCE_PATH}/* user@${VM1_IP}:${APP_PATH}
+        scp -r ${SOURCE_PATH}/* user@${VM2_IP}:${APP_PATH}
 
         echo "Démarrage de l'application Java sur les VMs..."
 
         # Démarrer l'application sur chaque VM
-        ssh user@$VM1_IP "nohup java -jar $APP_PATH/nom-du-fichier.jar > /dev/null 2>&1 &"
-        ssh user@$VM2_IP "nohup java -jar $APP_PATH/nom-du-fichier.jar > /dev/null 2>&1 &"
+        ssh user@${VM1_IP} "nohup java -jar ${APP_PATH}/nom-du-fichier.jar > /dev/null 2>&1 &"
+        ssh user@${VM2_IP} "nohup java -jar ${APP_PATH}/nom-du-fichier.jar > /dev/null 2>&1 &"
 
         echo "Déploiement terminé."
