@@ -33,10 +33,11 @@ steps:
         $VM2_NAME="vm2478_z1"
         $WEB_APP_PATH='/var/www/html'  # Emplacement de déploiement pour les fichiers PHP
 
-        # Copier tous les fichiers sur les VMs (modifiez selon votre configuration SSH et votre méthode de déploiement)
+        # Copier les fichiers sur les VMs (corrigé pour PowerShell)
         echo "Déploiement des fichiers PHP sur les machines virtuelles..."
-        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM1_NAME:$WEB_APP_PATH
-        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM2_NAME:$WEB_APP_PATH
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@${VM1_NAME}:$WEB_APP_PATH
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@${VM2_NAME}:$WEB_APP_PATH
+
 
         echo "Déploiement terminé. Validation en cours..."
 
