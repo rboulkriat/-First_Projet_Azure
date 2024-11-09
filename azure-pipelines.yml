@@ -7,12 +7,13 @@ pool:
   name: Agent_Pool  # Utilise votre pool d’agents personnalisé
 
 steps:
-  # Étape 1 : Installer Maven sur l'agent (si Maven n'est pas déjà installé)
-  - task: Maven@3
-    inputs:
-      mavenVersionOption: 'Default'
-      mavenDirectory: '/usr/share/maven'  # Spécifiez ici le chemin pour installer Maven
-      goals: 'validate'
+  # Étape 1 : Installer Maven manuellement si absent
+  - script: |
+      echo "Téléchargement et installation de Maven..."
+      curl -o apache-maven-3.8.4-bin.tar.gz https://downloads.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
+      tar xzvf apache-maven-3.8.4-bin.tar.gz -C /usr/share
+      export PATH=$PATH:/usr/share/apache-maven-3.8.4/bin
+      echo "Maven installé avec succès"
     displayName: 'Installer Maven sur l’agent'
 
   # Étape 2 : Installer Java avec JavaToolInstaller
@@ -30,7 +31,8 @@ steps:
       options: '-B'  # Mode batch pour les pipelines
       javaHomeOption: 'JDKVersion'
       jdkVersionOption: '1.11'  # Version de Java pour Maven
-      mavenVersionOption: 'Default'
+      mavenVersionOption: 'Path'
+      mavenDirectory: '/usr/share/apache-maven-3.8.4'
     displayName: 'Compiler et packager avec Maven'
 
   # Étape 4 : Publier l'artefact compilé
