@@ -1,26 +1,62 @@
-# PHP
-# Test and package your PHP project.
-# Add steps that run tests, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
 trigger:
-- main
+  branches:
+    include:
+      - feature-deploiement
 
 pool:
-  vmImage: ubuntu-latest
-
-variables:
-  phpVersion: 8.1
+  name: Agent_Pool
 
 steps:
-- script: |
-    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-    php -version
-  displayName: 'Use PHP version $(phpVersion)'
+  # Étape de connexion à Azure
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'pay_as_you_go'  # Assurez-vous que ce nom correspond à votre connexion de service
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Variables
+        $RESOURCE_GROUP="rg-interstellar-havoc"
+        $LB_NAME="MyPublicLoadBalancer"
+        $VM1_NAME="vm1559_z2"
+        $VM2_NAME="vm2478_z1"
 
-- script: composer install --no-interaction --prefer-dist
-  displayName: 'composer install'
+        # Créer un Load Balancer s'il n'existe pas déjà
+        echo "Vérification de l'existence du Load Balancer..."
+        $lbExists = az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "name" -o tsv
+        
+        if (-not $lbExists) {
+          echo "Création du Load Balancer..."
+          # Commande pour créer le Load Balancer, personnalise selon tes besoins
+          az network lb create --resource-group $RESOURCE_GROUP --name $LB_NAME --sku Standard --frontend-ip-name MyFrontEnd --backend-pool-name myBackEndPool
+        } else {
+          echo "Le Load Balancer existe déjà."
+        }
+
+        # Déployer les VM si elles n'existent pas
+        echo "Vérification des VMs..."
+        $vm1Exists = az vm show --resource-group $RESOURCE_GROUP --name $VM1_NAME --query "name" -o tsv
+        $vm2Exists = az vm show --resource-group $RESOURCE_GROUP --name $VM2_NAME --query "name" -o tsv
+        
+        if (-not $vm1Exists) {
+          echo "Création de la VM 1..."
+          # Commande pour créer la VM 1, personnalise selon tes besoins
+          az vm create --resource-group $RESOURCE_GROUP --name $VM1_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
+        } else {
+          echo "La VM 1 existe déjà."
+        }
+
+        if (-not $vm2Exists) {
+          echo "Création de la VM 2..."
+          # Commande pour créer la VM 2, personnalise selon tes besoins
+          az vm create --resource-group $RESOURCE_GROUP --name $VM2_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
+        } else {
+          echo "La VM 2 existe déjà."
+        }
+
+        # Association des NICs au Load Balancer
+        echo "Association des NICs au Load Balancer..."
+        az network nic ip-config address-pool add --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --nic-name $VM1_NAME --ip-config-name ipconfig1 --address-pool myBackEndPool
+        az network nic ip-config address-pool add --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --nic-name $VM2_NAME --ip-config-name ipconfig1 --address-pool myBackEndPool
+
+        echo "Déploiement terminé."
