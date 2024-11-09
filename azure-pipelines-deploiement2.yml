@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: Agent_Pool  # Utilise votre pool d’agents personnalisé
+
+steps:
+  # Étape 1 : Télécharger l'artefact généré lors de la compilation
+  - download: current
+    artifact: java-app
+    displayName: 'Télécharger l’artefact pour le déploiement'
+
+  # Étape 2 : Déployer l'artefact sur les machines virtuelles
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'pay_as_you_go'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # Variables de déploiement
+        $RESOURCE_GROUP="rg-interstellar-havoc"
+        $VM1_IP="172.203.225.108"
+        $VM2_IP="20.121.129.244"
+        $APP_PATH="/opt/java-app"  # Emplacement cible sur les VMs
+        $ARTIFACT_FILE="$(System.DefaultWorkingDirectory)/java-app/nom-du-fichier.jar"  # Remplacez par le nom exact du fichier JAR généré
+
+        echo "Déploiement de l’artefact Java sur les machines virtuelles..."
+
+        # Transférer l'artefact sur VM1 et VM2
+        scp $ARTIFACT_FILE user@$VM1_IP:$APP_PATH
+        scp $ARTIFACT_FILE user@$VM2_IP:$APP_PATH
+
+        echo "Démarrage de l'application Java sur les VMs..."
+
+        # Démarrer l'application Java sur chaque VM
+        ssh user@$VM1_IP "nohup java -jar $APP_PATH/nom-du-fichier.jar > /dev/null 2>&1 &"
+        ssh user@$VM2_IP "nohup java -jar $APP_PATH/nom-du-fichier.jar > /dev/null 2>&1 &"
+
+        echo "Déploiement terminé."
