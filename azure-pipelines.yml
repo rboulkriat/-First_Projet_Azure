@@ -21,6 +21,7 @@ steps:
     inputs:
       versionSpec: '11'  # Utilise Java 11, modifiez en fonction des besoins du projet
       jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'Preinstalled'  # Télécharge Java depuis la cache d'outils Azure DevOps
     displayName: 'Installer Java 11'
 
   # Étape 3 : Compiler et packager avec Maven via un script personnalisé
