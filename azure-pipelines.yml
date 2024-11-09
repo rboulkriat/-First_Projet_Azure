@@ -1,24 +1,21 @@
 trigger:
   branches:
     include:
-      - main
+      - main  # Déclenche le pipeline pour les changements dans la branche principale
 
 pool:
-  name: Agent_Pool
+  name: Agent_Pool  # Utilise votre pool d’agents personnalisé
 
 steps:
   # Étape 1 : Télécharger et configurer Maven pour Windows
   - script: |
       echo "Téléchargement et installation de Maven..."
-      curl -L -o apache-maven-3.8.4-bin.zip https://repo1.maven.org/maven2/org/apache/maven/apache-maven/3.8.4/apache-maven-3.8.4-bin.zip
-      if ($?) {
-        powershell -Command "Expand-Archive -Path apache-maven-3.8.4-bin.zip -DestinationPath C:\maven"
-        setx PATH "%PATH%;C:\maven\apache-maven-3.8.4\bin"
-        echo "Maven installé avec succès"
-      } else {
-        echo "Erreur : le téléchargement de Maven a échoué."
-        exit 1
-      }
+      curl -L -o apache-maven-3.8.4-bin.zip https://downloads.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip
+      powershell -Command "Expand-Archive -Path apache-maven-3.8.4-bin.zip -DestinationPath C:\maven"
+      setx PATH "%PATH%;C:\maven\apache-maven-3.8.4\bin"
+      echo "Maven installé avec succès"
+      echo "Vérification de l'installation de Maven..."
+      C:\maven\apache-maven-3.8.4\bin\mvn -v
     displayName: 'Installer Maven sur l’agent'
 
   # Étape 2 : Installer Java manuellement en téléchargeant l'archive ZIP
@@ -40,6 +37,40 @@ steps:
   # Étape 4 : Publier l'artefact compilé
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: '$(System.DefaultWorkingDirectory)\target'
+      pathtoPublish: '$(System.DefaultWorkingDirectory)\target'  # Dossier où Maven produit le JAR ou WAR
       artifactName: 'java-app'
     displayName: 'Publier l’artefact pour le déploiement'
+
+  # Étape 5 : Valider le déploiement en vérifiant l'accessibilité de l'application sur les VMs
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: 'pay_as_you_go'
+      scriptType: 'ps'  # Utilisation de PowerShell sur un agent Windows
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        # IP des machines virtuelles
+        $VM1_IP = "172.203.225.108"
+        $VM2_IP = "20.121.129.244"
+        $APP_PORT = "8080"  # Le port sur lequel l'application Java est censée fonctionner
+
+        Write-Host "Validation de l'accès à l'application sur les VMs..."
+
+        # Vérifie si l'application est accessible sur VM1
+        try {
+          $response1 = Invoke-WebRequest -Uri "http://$VM1_IP:$APP_PORT" -UseBasicParsing
+          Write-Host "L'application est accessible sur VM1"
+        } catch {
+          Write-Host "Erreur : L'application n'est pas accessible sur VM1"
+          exit 1
+        }
+
+        # Vérifie si l'application est accessible sur VM2
+        try {
+          $response2 = Invoke-WebRequest -Uri "http://$VM2_IP:$APP_PORT" -UseBasicParsing
+          Write-Host "L'application est accessible sur VM2"
+        } catch {
+          Write-Host "Erreur : L'application n'est pas accessible sur VM2"
+          exit 1
+        }
+
+        Write-Host "Validation du déploiement réussie."
