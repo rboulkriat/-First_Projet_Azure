@@ -1,63 +1,69 @@
-
 trigger:
   branches:
     include:
       - feature-pipeline
 
 pool:
-  name: Agent_Pool 
+  name: Agent_Pool
 
 steps:
-  # Connexion à Azure
+  # Étape 1 : Copier tous les fichiers PHP pour le déploiement
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'  # Copie tous les fichiers du projet
+      Contents: '**/*'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/php-app'
+
+  # Étape 2 : Publier l'artefact PHP
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/php-app'
+      artifactName: 'php-app'
+
+  # Étape 3 : Déployer tous les fichiers PHP sur les ressources Azure
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Variables
+        # Variables de déploiement
         $RESOURCE_GROUP="rg-interstellar-havoc"
-        $LB_NAME="MyPublicLoadBalancer"
-        $BACKEND_POOL_NAME="myBackEndPool"
-        $VM1_NIC_NAME="vm1559_z2"
-        $VM2_NIC_NAME="vm2478_z1"
+        $VM1_NAME="vm1559_z2"
+        $VM2_NAME="vm2478_z1"
+        $WEB_APP_PATH='/var/www/html'  # Emplacement de déploiement pour les fichiers PHP
 
-        echo "Vérification de l'état du Load Balancer..."
-        az network lb show --resource-group $RESOURCE_GROUP --name $LB_NAME --query "{name:name, location:location, provisioningState:provisioningState}" -o table
+        # Copier tous les fichiers sur les VMs (modifiez selon votre configuration SSH et votre méthode de déploiement)
+        echo "Déploiement des fichiers PHP sur les machines virtuelles..."
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM1_NAME:$WEB_APP_PATH
+        scp -r $(Build.ArtifactStagingDirectory)/php-app/* user@$VM2_NAME:$WEB_APP_PATH
 
-        echo "Vérification du Backend Pool du Load Balancer..."
-        az network lb address-pool show --resource-group $RESOURCE_GROUP --lb-name $LB_NAME --name $BACKEND_POOL_NAME --query "{name:name, id:id}" -o table
+        echo "Déploiement terminé. Validation en cours..."
 
-        echo "Vérification des VM associées au Load Balancer..."
-        az network nic show --resource-group $RESOURCE_GROUP --name $VM1_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
-        az network nic show --resource-group $RESOURCE_GROUP --name $VM2_NIC_NAME --query "{name:name, virtualMachine:id, provisioningState:provisioningState}" -o table
-
-        echo "Vérification de l'état des VM..."
-        az vm list -d --resource-group $RESOURCE_GROUP --query "[].{Name:name, PowerState:powerState}" -o table
-
-  # Optionnel : Vérifier la disponibilité du site web si l'application est déployée sur les VM
+  # Étape 4 : Vérifier que le fichier principal (index.php) est accessible
   - task: AzureCLI@2
     inputs:
       azureSubscription: 'pay_as_you_go'
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-     
-        $IP_VM1 = "172.203.225.108"  
-        $IP_VM2 = "20.121.129.244"    
+        # Adresses IP des VMs où le site doit être accessible
+        $IP_VM1 = "172.203.225.108"
+        $IP_VM2 = "20.121.129.244"
+        $MAIN_FILE = "index.php"  # Fichier principal de votre application
 
-        Write-Host "Vérification de l'accès au site sur les VM..."
+        Write-Host "Vérification de l'accès à $MAIN_FILE sur les VMs..."
+
         try {
-          # Vérifie l'accès au site sur VM1
-          $response1 = Invoke-WebRequest -Uri "http://$IP_VM1" -UseBasicP -ErrorAction Stop
+          $response1 = Invoke-WebRequest -Uri "http://$IP_VM1/$MAIN_FILE" -UseBasicParsing -ErrorAction Stop
           Write-Host "Réponse de VM1 : $($response1.StatusCode)"
         } catch {
-          Write-Host "Erreur lors de l'accès à VM1 : $_"
+          Write-Host "Erreur lors de l'accès à $MAIN_FILE sur VM1 : $_"
         }
 
         try {
-          $response2 = Invoke-WebRequest -Uri "http://$IP_VM2" -UseBasicP -ErrorAction Stop
+          $response2 = Invoke-WebRequest -Uri "http://$IP_VM2/$MAIN_FILE" -UseBasicParsing -ErrorAction Stop
           Write-Host "Réponse de VM2 : $($response2.StatusCode)"
         } catch {
-          Write-Host "Erreur lors de l'accès à VM2 : $_"
+          Write-Host "Erreur lors de l'accès à $MAIN_FILE sur VM2 : $_"
         }
