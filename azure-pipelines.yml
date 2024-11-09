@@ -11,7 +11,7 @@ steps:
   # Étape de connexion à Azure
   - task: AzureCLI@2
     inputs:
-      azureSubscription: 'pay_as_you_go'  # Assurez-vous que ce nom correspond à votre connexion de service
+      azureSubscription: 'pay_as_you_go'  
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
@@ -27,7 +27,7 @@ steps:
         
         if (-not $lbExists) {
           echo "Création du Load Balancer..."
-          # Commande pour créer le Load Balancer, personnalise selon tes besoins
+          # Commande pour créer le Load Balancer
           az network lb create --resource-group $RESOURCE_GROUP --name $LB_NAME --sku Standard --frontend-ip-name MyFrontEnd --backend-pool-name myBackEndPool
         } else {
           echo "Le Load Balancer existe déjà."
@@ -40,7 +40,7 @@ steps:
         
         if (-not $vm1Exists) {
           echo "Création de la VM 1..."
-          # Commande pour créer la VM 1, personnalise selon tes besoins
+          # Commande pour créer la VM 1
           az vm create --resource-group $RESOURCE_GROUP --name $VM1_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
         } else {
           echo "La VM 1 existe déjà."
@@ -48,7 +48,7 @@ steps:
 
         if (-not $vm2Exists) {
           echo "Création de la VM 2..."
-          # Commande pour créer la VM 2, personnalise selon tes besoins
+          # Commande pour créer la VM 2
           az vm create --resource-group $RESOURCE_GROUP --name $VM2_NAME --image Win2022Datacenter --admin-username admin --admin-password "AdminAdmin123!" --size Standard_D2as_v4
         } else {
           echo "La VM 2 existe déjà."

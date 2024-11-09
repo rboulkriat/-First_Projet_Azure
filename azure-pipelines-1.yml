@@ -42,9 +42,9 @@ steps:
       scriptType: 'ps'
       scriptLocation: 'inlineScript'
       inlineScript: |
-        # Remplacez "IP_VM1" et "IP_VM2" par les IP publiques de vos VMs si elles sont accessibles publiquement
-        $IP_VM1 = "172.203.225.108"  # Assure-toi que cette IP est valide
-        $IP_VM2 = "20.121.129.244"    # Assure-toi que cette IP est valide
+     
+        $IP_VM1 = "172.203.225.108"  
+        $IP_VM2 = "20.121.129.244"    
 
         Write-Host "Vérification de l'accès au site sur les VM..."
         try {
