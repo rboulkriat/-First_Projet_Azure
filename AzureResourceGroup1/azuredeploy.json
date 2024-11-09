@@ -1,8 +1,193 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {},
-  "variables": {},
-  "resources": [],
-  "outputs": {}
+  "additionalCapabilities": null,
+  "automaticRepairsPolicy": null,
+  "constrainedMaximumCapacity": false,
+  "doNotRunExtensionsOnOverprovisionedVMs": null,
+  "etag": "\"4\"",
+  "extendedLocation": null,
+  "hostGroup": null,
+  "id": "/subscriptions/07bb4577-486d-4735-aa65-a99f228ad761/resourceGroups/rg-interstellar-havoc/providers/Microsoft.Compute/virtualMachineScaleSets/VMScaleSet",
+  "identity": null,
+  "location": "centralus",
+  "name": "VMScaleSet",
+  "orchestrationMode": "Flexible",
+  "overprovision": null,
+  "plan": null,
+  "platformFaultDomainCount": 1,
+  "priorityMixPolicy": null,
+  "provisioningState": "Succeeded",
+  "proximityPlacementGroup": null,
+  "resiliencyPolicy": null,
+  "resourceGroup": "rg-interstellar-havoc",
+  "scaleInPolicy": null,
+  "scheduledEventsPolicy": null,
+  "singlePlacementGroup": false,
+  "sku": {
+    "capacity": 3,
+    "name": "Standard_D2as_v4",
+    "tier": "Standard"
+  },
+  "skuProfile": null,
+  "spotRestorePolicy": null,
+  "tags": {},
+  "timeCreated": "2024-11-06T05:28:45.029479+00:00",
+  "type": "Microsoft.Compute/virtualMachineScaleSets",
+  "uniqueId": "3b15c44b-1688-417f-a41e-986b07b05e45",
+  "upgradePolicy": {
+    "automaticOsUpgradePolicy": null,
+    "mode": "Automatic",
+    "rollingUpgradePolicy": null
+  },
+  "virtualMachineProfile": {
+    "applicationProfile": null,
+    "billingProfile": null,
+    "capacityReservation": null,
+    "diagnosticsProfile": null,
+    "evictionPolicy": null,
+    "extensionProfile": null,
+    "hardwareProfile": null,
+    "licenseType": null,
+    "networkProfile": {
+      "healthProbe": null,
+      "networkApiVersion": "2020-11-01",
+      "networkInterfaceConfigurations": [
+        {
+          "auxiliaryMode": "None",
+          "auxiliarySku": "None",
+          "deleteOption": "Delete",
+          "disableTcpStateTracking": false,
+          "dnsSettings": {
+            "dnsServers": []
+          },
+          "enableAcceleratedNetworking": null,
+          "enableFpga": null,
+          "enableIpForwarding": false,
+          "ipConfigurations": [
+            {
+              "applicationGatewayBackendAddressPools": [],
+              "applicationSecurityGroups": [],
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "/subscriptions/07bb4577-486d-4735-aa65-a99f228ad761/resourceGroups/rg-interstellar-havoc/providers/Microsoft.Network/loadBalancers/VMScaleSetLB/backendAddressPools/VMScaleSetLBBEPool",
+                  "resourceGroup": "rg-interstellar-havoc"
+                }
+              ],
+              "loadBalancerInboundNatPools": null,
+              "name": "vmsca987eIPConfig",
+              "primary": null,
+              "privateIpAddressVersion": "IPv4",
+              "publicIpAddressConfiguration": null,
+              "subnet": {
+                "id": "/subscriptions/07bb4577-486d-4735-aa65-a99f228ad761/resourceGroups/rg-interstellar-havoc/providers/Microsoft.Network/virtualNetworks/Vm1-vnet/subnets/default",
+                "resourceGroup": "rg-interstellar-havoc"
+              }
+            }
+          ],
+          "name": "vmsca987eNic",
+          "networkSecurityGroup": {
+            "id": "/subscriptions/07bb4577-486d-4735-aa65-a99f228ad761/resourceGroups/rg-interstellar-havoc/providers/Microsoft.Network/networkSecurityGroups/VMScaleSetNSG",
+            "resourceGroup": "rg-interstellar-havoc"
+          },
+          "primary": true
+        }
+      ]
+    },
+    "osProfile": {
+      "adminPassword": null,
+      "adminUsername": "admin_root",
+      "allowExtensionOperations": true,
+      "computerNamePrefix": "VMScaleS",
+      "customData": null,
+      "linuxConfiguration": null,
+      "requireGuestProvisionSignal": true,
+      "secrets": [],
+      "windowsConfiguration": {
+        "additionalUnattendContent": null,
+        "enableAutomaticUpdates": true,
+        "enableVmAgentPlatformUpdates": null,
+        "patchSettings": {
+          "assessmentMode": "ImageDefault",
+          "automaticByPlatformSettings": null,
+          "enableHotpatching": null,
+          "patchMode": "AutomaticByOS"
+        },
+        "provisionVmAgent": true,
+        "timeZone": null,
+        "winRm": null
+      }
+    },
+    "priority": null,
+    "scheduledEventsProfile": null,
+    "securityPostureReference": null,
+    "securityProfile": null,
+    "serviceArtifactReference": null,
+    "storageProfile": {
+      "dataDisks": null,
+      "diskControllerType": "SCSI",
+      "imageReference": {
+        "communityGalleryImageId": null,
+        "exactVersion": null,
+        "id": null,
+        "offer": "WindowsServer",
+        "publisher": "MicrosoftWindowsServer",
+        "sharedGalleryImageId": null,
+        "sku": "2022-datacenter-g2",
+        "version": "latest"
+      },
+      "osDisk": {
+        "caching": "ReadWrite",
+        "createOption": "FromImage",
+        "deleteOption": "Delete",
+        "diffDiskSettings": null,
+        "diskSizeGb": 127,
+        "image": null,
+        "managedDisk": {
+          "diskEncryptionSet": null,
+          "securityProfile": null,
+          "storageAccountType": "Premium_LRS"
+        },
+        "name": null,
+        "osType": "Windows",
+        "vhdContainers": null,
+        "writeAcceleratorEnabled": null
+      }
+    },
+    "timeCreated": "2024-11-06T05:28:45.029479+00:00",
+    "userData": null
+  },
+  "zonalPlatformFaultDomainAlignMode": null,
+  "zoneBalance": null,
+  "zones": null,
+  "autoscale": {
+    "profiles": [
+      {
+        "name": "ScaleUpCPU",
+        "capacity": {
+          "default": "3",
+          "minimum": "1",
+          "maximum": "10"
+        },
+        "rules": [
+          {
+            "metricTrigger": {
+              "metricName": "Percentage CPU",
+              "metricNamespace": "Microsoft.Compute/virtualMachineScaleSets",
+              "timeGrain": "PT1M",
+              "statistic": "Average",
+              "timeWindow": "PT5M",
+              "timeAggregation": "Average",
+              "operator": "GreaterThan",
+              "threshold": 50
+            },
+            "scaleAction": {
+              "direction": "Increase",
+              "type": "ChangeCount",
+              "value": "1",
+              "cooldown": "PT5M"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

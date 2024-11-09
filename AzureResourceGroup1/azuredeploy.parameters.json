@@ -1,6 +1,50 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    // Région de déploiement du Scale Set
+    "location": {
+      "value": "centralus"
+    },
+
+    // Nom du Virtual Machine Scale Set
+    "vmScaleSetName": {
+      "value": "VMScaleSet"
+    },
+
+    // Nom d'utilisateur administrateur pour les machines virtuelles
+    "adminUsername": {
+      "value": "admin_root"
+    },
+
+    // Mot de passe de l'administrateur (Je vais le mettre dans le Azure Key Vault)
+    "adminPassword": {
+      "value": "AdminAdmin123@"
+    },
+
+    // Taille des machines virtuelles dans le Scale Set
+    "vmSize": {
+      "value": "Standard_D2as_v4"
+    },
+
+    // Informations sur l'image utilisée pour les VM
+    "imagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+
+    // Offre de l'image
+    "imageOffer": {
+      "value": "WindowsServer"
+    },
+
+    // SKU de l'image
+    "imageSku": {
+      "value": "2022-datacenter-g2"
+    },
+
+    // Nombre initial de machines virtuelles dans le Scale Set
+    "capacity": {
+      "value": 3
+    }
   }
 }
